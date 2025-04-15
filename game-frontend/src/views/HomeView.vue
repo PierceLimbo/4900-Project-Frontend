@@ -1,127 +1,70 @@
 <template>
   <div class="home-view">
-    <h1 class="title">GameCritiq Picks</h1>
-    <p class="subtitle">Check out some of the top rated games by our community.</p>
+    <h1 class="title">Latest Reviews</h1>
+    <p class="subtitle">See what players are saying across all games.</p>
 
-    <div class="games">
-      <div v-for="game in featuredGames" :key="game.id" class="game-card">
-        <img :src="game.image" :alt="game.title" />
-        <div class="info">
-          <h2>{{ game.title }}</h2>
-          <p class="details">{{ game.platform }} | {{ game.genre }}</p>
-          <p class="publisher">By {{ game.publisher }} | {{ game.release_date }}</p>
-          <p class="snippet">"{{ game.snippet }}"</p>
-          <div class="rating">⭐⭐⭐⭐☆</div>
-        </div>
+    <div class="reviews">
+      <div v-for="review in reviews" :key="review.id" class="review-card">
+        <h2>Review by {{ review.user }} <br><br> {{ review.game }}</h2>
+        <p class="comment">"{{ review.review_text }}"</p>
+        <p class="meta">Rating: {{ review.rating }} / 10</p>
+        <p class="meta">Posted: {{ new Date(review.created_at).toLocaleDateString() }}</p>
       </div>
+
     </div>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   name: 'HomeView',
   data() {
     return {
-      featuredGames: [
-        {
-          id: 1,
-          title: 'The Last of Us Part II',
-          platform: 'PS4',
-          genre: 'Action',
-          snippet: 'Really good and intense.',
-          publisher: 'Naughty Dog',
-          release_date: '2020-06-19',
-          //image: add link to image
-        },
-        {
-          id: 2,
-          title: 'Halo Infinite',
-          platform: 'Xbox',
-          genre: 'Shooter',
-          snippet: 'Fun with friends.',
-          publisher: '343 Industries',
-          release_date: '2021-12-08',
-          //image: add link to image
-        },
-        {
-          id: 3,
-          title: 'Animal Crossing: New Horizons',
-          platform: 'Switch',
-          genre: 'Simulation',
-          snippet: 'Cute and relaxing.',
-          publisher: 'Nintendo',
-          release_date: '2020-03-20',
-          //image: add link to image
-        }
-      ]
-    }
+      reviews: []
+    };
+  },
+  mounted() {
+    axios.get('http://localhost:8000/api/reviews/')
+      .then(response => {
+        this.reviews = response.data;
+      })
+      .catch(error => {
+        console.error("Failed to fetch reviews:", error);
+      });
   }
-}
+};
 </script>
 
 <style scoped>
 .home-view {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem 1rem;
+  padding: 20px;
 }
 .title {
-  font-size: 2.5rem;
+  font-size: 2em;
   font-weight: bold;
-  margin-bottom: 0.5rem;
-  color: #d32323;
-  text-align: left;
 }
 .subtitle {
-  font-size: 1.1rem;
-  margin-bottom: 2rem;
-  color: #555;
-  text-align: left;
+  margin-bottom: 20px;
 }
-.games {
+.reviews {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  gap: 2rem;
+  gap: 20px;
 }
-.game-card {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  transition: transform 0.2s ease;
+.review-card {
+  border: 1px solid #ccc;
+  padding: 15px;
   width: 300px;
+  background-color: #f9f9f9;
 }
-.game-card:hover {
-  transform: translateY(-5px);
-}
-.game-card img {
-  width: 100%;
-  height: 180px;
-  object-fit: cover;
-}
-.info {
-  padding: 1rem;
-}
-.info h2 {
-  margin: 0 0 0.5rem;
-  font-size: 1.3rem;
-  color: #222;
-}
-.details, .publisher {
-  font-size: 0.9rem;
-  color: #666;
-  margin: 0.25rem 0;
-}
-.snippet {
+.comment {
   font-style: italic;
-  color: #444;
-  margin-top: 0.5rem;
+  margin-bottom: 10px;
 }
-.rating {
-  margin-top: 0.5rem;
-  color: #f39c12;
-  font-size: 1.2rem;
+.meta {
+  font-size: 0.9em;
+  color: #555;
 }
 </style>
