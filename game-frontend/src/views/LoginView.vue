@@ -13,7 +13,7 @@
             type="email" 
             placeholder="Email" 
             required
-            style="width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 6px; font-size: 1rem; transition: border-color 0.2s ease;"
+            style="width: 100%; padding: 0.70rem; border: 1px solid #ddd; border-radius: 6px; font-size: 1rem; transition: border-color 0.2s ease;"
             @focus="e => e.target.style.borderColor = '#4f46e5'"
             @blur="e => e.target.style.borderColor = '#ddd'"
           />

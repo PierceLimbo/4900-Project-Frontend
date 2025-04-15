@@ -63,7 +63,7 @@ export default {
   flex-wrap: wrap;
 }
 .links a {
-  color: white;
+  color: black;
   text-decoration: none;
   font-weight: 600;
   transition: all 0.2s ease;
