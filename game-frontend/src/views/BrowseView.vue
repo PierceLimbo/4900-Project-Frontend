@@ -11,7 +11,12 @@
           <p class="details">{{ game.platform }} | {{ game.genre }}</p>
           <p class="publisher">By {{ game.publisher }} | {{ game.release_date }}</p>
           <p class="snippet">"{{ game.snippet }}"</p>
-          <div class="rating">⭐⭐⭐⭐☆</div>
+          <div class="rating">
+            <span v-for="n in 10" :key="n">
+              <i :class="n <= Math.round(game.average_rating) ? 'fas fa-star' : 'far fa-star'"></i>
+            </span>
+            <span class="numeric-rating">({{ game.average_rating.toFixed(1) }}/10)</span>
+          </div>
         </div>
       </div>
     </div>
@@ -20,6 +25,7 @@
 
 <script>
 import axios from 'axios';
+import '@fortawesome/fontawesome-free/css/all.css';
 
 export default {
   name: 'HomeView',
@@ -76,5 +82,13 @@ export default {
 .rating {
   font-size: 1.2em;
   color: #f5b301;
+}
+.rating i {
+  margin-right: 2px;
+}
+.numeric-rating {
+  font-size: 0.9em;
+  margin-left: 5px;
+  color: #333;
 }
 </style>

@@ -1,8 +1,18 @@
 <template>
   <nav class="navbar">
     <div class="container">
-      <div class="logo">🎮 GameCritiq</div>
+<router-link to="/" class="logo-area flex items-center space-x-2">
+  <img
+    src="@/assets/logo.png"
+    alt="Logo"
+    class="object-contain"
+    style="height: 100px; width: auto; max-height: 100px; max-width: 250px;"
+  />
+</router-link>
+
       <input class="search" type="text" placeholder="🔍 Search games..." />
+
+      <!-- Navigation Links -->
       <div class="links">
         <router-link to="/">Home</router-link>
         <router-link to="/browse">Browse</router-link>
@@ -12,6 +22,7 @@
     </div>
   </nav>
 </template>
+
 
 <script>
 export default {
@@ -91,4 +102,14 @@ export default {
   color: #b40000;
   border-color: #ffe8e8;
 }
+.logo-area {
+  min-width: 180px; /* or adjust to your preference */
+  max-width: 250px;
+  padding-right: 1rem;
+}
+.logo {
+  font-size: 1.6rem;
+  font-weight: bold;
+}
+
 </style>
