@@ -8,9 +8,10 @@
         <img :src="game.image" :alt="game.title" />
         <div class="info">
           <h2>{{ game.title }}</h2>
-          <p class="details">{{ game.platform }} | {{ game.genre }}</p>
-          <p class="publisher">By {{ game.publisher }} | {{ game.release_date }}</p>
-          <p class="snippet">"{{ game.snippet }}"</p>
+           <p class="publisher"><b>By:</b> {{ game.publisher }}  <br><b>Release Date</b>: {{ game.release_date }}</p>
+          <p class="details"><b>Where You Can Play</b>: {{ game.platform }} 
+          <br> <b>Genre</b>: {{ game.genre}}</p>
+          <p class="snippet"></p>
           <div class="rating">
             <span v-for="n in 10" :key="n">
               <i :class="n <= Math.round(game.average_rating) ? 'fas fa-star' : 'far fa-star'"></i>
