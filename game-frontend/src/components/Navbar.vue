@@ -6,8 +6,11 @@
       <div class="links">
         <router-link to="/">Home</router-link>
         <router-link to="/browse">Browse</router-link>
-        <router-link v-if="isAuthenticated" to="/reviews">Reviews</router-link>
-        <router-link to="/login" class="login">Login</router-link>
+        <router-link v-if="isAuthenticated" to="/reviews">My Reviews</router-link>
+
+        <router-link v-if="!isAuthenticated" to="/login" class="login">Login</router-link>
+
+        <a v-if="isAuthenticated" @click="handleLogout" class="login logout-btn">Logout</a>
       </div>
     </div>
   </nav>
@@ -17,8 +20,17 @@
 export default {
   name: 'Navbar',
   computed: {
+    
     isAuthenticated() {
-      return localStorage.getItem('userLoggedIn') === 'true';
+      return !!localStorage.getItem('accessToken');  
+    }
+  },
+  methods: {
+ 
+    handleLogout() {
+      localStorage.removeItem('accessToken');  
+      window.location.reload(); 
+      window.location.replace('/'); 
     }
   }
 }
@@ -90,5 +102,14 @@ export default {
   background-color: #ffe8e8;
   color: #b40000;
   border-color: #ffe8e8;
+}
+
+.logout-btn {
+  cursor: pointer;
+  user-select: none;
+  outline: none;
+}
+.logout-btn:hover {
+  background-color: #ffe8e8; 
 }
 </style>
