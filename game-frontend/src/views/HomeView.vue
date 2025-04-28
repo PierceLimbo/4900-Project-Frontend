@@ -27,7 +27,7 @@ export default {
     };
   },
   mounted() {
-    auth.get('/api/games/')
+    auth.get('/api/reviews/')
       .then(response => {
         this.reviews = response.data;
       })
