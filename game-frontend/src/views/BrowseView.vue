@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import auth from '@/services/auth';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 export default {
@@ -36,13 +36,13 @@ export default {
     };
   },
   mounted() {
-    axios.get('http://localhost:8000/api/games/')
+    auth.get('/api/games/')
       .then(response => {
-        console.log("🎮 Received games:", response.data);
+        console.log(" Received games:", response.data);
         this.games = response.data;
       })
       .catch(error => {
-        console.error("❌ Failed to fetch games:", error);
+        console.error(" Failed to fetch games:", error);
       });
   }
 };

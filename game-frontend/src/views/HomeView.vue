@@ -16,7 +16,8 @@
 </template>
 
 <script>
-import axios from 'axios';
+
+import auth from '@/services/auth';
 
 export default {
   name: 'HomeView',
@@ -26,7 +27,7 @@ export default {
     };
   },
   mounted() {
-    axios.get('http://localhost:8000/api/reviews/')
+    auth.get('/api/games/')
       .then(response => {
         this.reviews = response.data;
       })
