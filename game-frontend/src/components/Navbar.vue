@@ -1,51 +1,72 @@
 <template>
   <nav class="navbar">
     <div class="container">
-<router-link to="/" class="logo-area flex items-center space-x-2">
-  <img
-    src="@/assets/logo.png"
-    alt="Logo"
-    class="object-contain"
-    style="height: 100px; width: auto; max-height: 100px; max-width: 250px;"
-  />
-</router-link>
+      <router-link to="/" class="logo-area flex items-center space-x-2">
+        <img
+          src="@/assets/logo.png"
+          alt="Logo"
+          class="object-contain"
+          style="height: 100px; width: auto; max-height: 100px; max-width: 250px;"
+        />
+      </router-link>
 
-      <input class="search" type="text" placeholder="🔍 Search games..." />
+      <input
+        v-model="searchQuery"
+        @keyup.enter="performSearch"
+        class="search"
+        type="text"
+        placeholder="🔍 Search games..."
+      />
 
-      <!-- Navigation Links -->
       <div class="links">
         <router-link to="/">Home</router-link>
         <router-link to="/browse">Browse</router-link>
         <router-link v-if="isAuthenticated" to="/reviews">My Reviews</router-link>
-
         <router-link v-if="!isAuthenticated" to="/login" class="login">Login</router-link>
-
         <a v-if="isAuthenticated" @click="handleLogout" class="login logout-btn">Logout</a>
       </div>
     </div>
   </nav>
 </template>
 
-
 <script>
+import { useRouter } from 'vue-router';
+import { ref } from 'vue';
+
 export default {
   name: 'Navbar',
-  computed: {
-    
-    isAuthenticated() {
-      return !!localStorage.getItem('accessToken');  
-    }
-  },
-  methods: {
- 
-    handleLogout() {
-      localStorage.removeItem('accessToken');  
-      window.location.reload(); 
-      window.location.replace('/'); 
-    }
+  setup() {
+    const router = useRouter();
+    const searchQuery = ref('');
+
+    const isAuthenticated = () => {
+      return !!localStorage.getItem('accessToken');
+    };
+
+    const performSearch = () => {
+      if (searchQuery.value.trim()) {
+        router.push({ path: '/browse', query: { search: searchQuery.value.trim() } });
+      } else {
+        router.push('/browse');
+      }
+    };
+
+    const handleLogout = () => {
+      localStorage.removeItem('accessToken');
+      window.location.reload();
+      window.location.replace('/');
+    };
+
+    return {
+      searchQuery,
+      performSearch,
+      isAuthenticated,
+      handleLogout
+    };
   }
 }
 </script>
+
 
 <style scoped>
 .navbar {
