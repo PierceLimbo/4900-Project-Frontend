@@ -10,3 +10,9 @@ const auth = axios.create({
 });
 
 export default auth;
+
+export const postGame = (gameData) => auth.post('api/games/', gameData);
+export const deleteGame = (id) => auth.delete(`api/games/${id}/`);
+
+export const postReview = (reviewData) => auth.post('api/reviews/', reviewData);
+export const deleteReview = (id) => auth.delete(`api/reviews/${id}/`);

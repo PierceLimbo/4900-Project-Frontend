@@ -1,9 +1,20 @@
+<form @submit.prevent="addGame">
+  <input v-model="newGame.title" placeholder="Title" required />
+  <input v-model="newGame.publisher" placeholder="Publisher" required />
+  <input v-model="newGame.release_date" type="date" required />
+  <input v-model="newGame.platform" placeholder="Platform" required />
+  <input v-model="newGame.genre" placeholder="Genre" required />
+  <input v-model="newGame.image" placeholder="Image URL" required />
+  <button type="submit">Add Game</button>
+</form>
+
 <template>
   <div class="home-view">
     <h1 class="title">GameCritiq Library</h1>
     <p class="subtitle">Explore our entire collection of games rated by the community.</p>
 
     <div class="games">
+    <button @click="deleteGame(game.id)">Delete</button>
       <div v-for="game in filteredGames" :key="game.id" class="game-card">
         <img :src="game.image" :alt="game.title" />
         <div class="info">
@@ -73,6 +84,41 @@ export default {
   }
 }
 </script>
+
+import { postGame, deleteGame } from '@/services/auth';
+
+export default {
+  data() {
+    return {
+      newGame: {
+        title: '',
+        publisher: '',
+        release_date: '',
+        platform: '',
+        genre: '',
+        image: ''
+      },
+      games: []
+    };
+  },
+  methods: {
+    async addGame() {
+      await postGame(this.newGame);
+      this.fetchGames();
+    },
+    async deleteGame(id) {
+      await deleteGame(id);
+      this.fetchGames();
+    },
+    async fetchGames() {
+      const response = await axios.get(API_URL + 'api/games/');
+      this.games = response.data;
+    }
+  },
+  mounted() {
+    this.fetchGames();
+  }
+};
 
 
 <style scoped>
