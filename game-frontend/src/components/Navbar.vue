@@ -9,16 +9,16 @@
         />
       </router-link>
 
-      <input class="search" type="text" placeholder="🔍 Search games..." />
-
       <div class="links">
         <router-link to="/">Home</router-link>
         <router-link to="/browse">Browse</router-link>
         <router-link v-if="isAuthenticated" to="/reviews">My Reviews</router-link>
+        <router-link v-if="isAuthenticated" to="/games/add" class="add-game-btn">Add Game</router-link>
 
         <router-link v-if="!isAuthenticated" to="/login" class="auth-btn login">Login</router-link>
+        <router-link v-if="!isAuthenticated" to="/signup" class="auth-btn signup">Sign Up</router-link>
         <button v-if="isAuthenticated" @click="handleLogout" class="auth-btn logout">
-          <i class="fas fa-sign-out-alt"></i> Logout
+          Logout
         </button>
       </div>
     </div>
@@ -36,7 +36,9 @@ export default {
   methods: {
     handleLogout() {
       localStorage.removeItem('accessToken');
-      window.location.replace('/');
+      localStorage.removeItem('refreshToken');
+      localStorage.removeItem('userRole');
+      window.location.href = '/';
     }
   }
 }
@@ -64,28 +66,15 @@ export default {
 }
 
 .logo-area {
-  min-width: 180px;
-  max-width: 250px;
-  padding-right: 1rem;
+  min-width: 100px;
+  max-width: 200px;
 }
 
 .logo-image {
-  height: 100px;
+  height: 60px;
   width: auto;
-  max-height: 100px;
-  max-width: 250px;
+  max-height: 60px;
   object-fit: contain;
-}
-
-.search {
-  flex: 1;
-  padding: 0.5rem 1rem;
-  border-radius: 20px;
-  border: none;
-  font-size: 1rem;
-  max-width: 400px;
-  background: white;
-  color: #333;
 }
 
 .links {
@@ -95,7 +84,7 @@ export default {
   flex-wrap: wrap;
 }
 
-.links a:not(.auth-btn) {
+.links a:not(.auth-btn):not(.add-game-btn) {
   color: white;
   text-decoration: none;
   font-weight: 600;
@@ -104,13 +93,31 @@ export default {
   border-radius: 12px;
 }
 
-.links a:not(.auth-btn):hover {
+.links a:not(.auth-btn):not(.add-game-btn):hover {
   background-color: rgba(255, 255, 255, 0.2);
 }
 
-.links a:not(.auth-btn).router-link-active {
+.links a:not(.auth-btn):not(.add-game-btn).router-link-active {
   background-color: white;
   color: #ff4d4f;
+}
+
+.add-game-btn {
+  background-color: #ffd54f;
+  color: #333;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 0.4rem 0.8rem;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.add-game-btn:hover {
+  background-color: #ffb300;
+}
+
+.add-game-btn.router-link-active {
+  background-color: #ffb300;
 }
 
 .auth-btn {
@@ -138,6 +145,16 @@ export default {
   border-color: #ffe8e8;
 }
 
+.auth-btn.signup {
+  background-color: transparent;
+  color: white;
+  text-decoration: none;
+}
+
+.auth-btn.signup:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
 .auth-btn.logout {
   background-color: transparent;
   color: white;
@@ -148,10 +165,6 @@ export default {
   color: #ff4d4f;
 }
 
-.auth-btn i {
-  font-size: 0.9em;
-}
-
 @media (max-width: 768px) {
   .container {
     flex-direction: column;
@@ -160,10 +173,6 @@ export default {
 
   .logo-area {
     margin: 0 auto;
-  }
-
-  .search {
-    max-width: none;
   }
 
   .links {

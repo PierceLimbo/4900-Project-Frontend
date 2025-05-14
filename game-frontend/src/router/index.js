@@ -5,6 +5,7 @@ import SignUpView from '../views/SignUpView.vue';
 import BrowseView from '../views/BrowseView.vue';
 import GameDetailView from '../views/GameDetailView.vue';
 import ReviewsView from '../views/ReviewsView.vue';
+import AddGameView from '../views/AddGameView.vue';
 
 const router = createRouter({
   history: createWebHashHistory(),
@@ -28,6 +29,12 @@ const router = createRouter({
       path: '/browse',
       name: 'browse',
       component: BrowseView
+    },
+    {
+      path: '/games/add',
+      name: 'add-game',
+      component: AddGameView,
+      meta: { requiresAuth: true }
     },
     {
       path: '/games/:game_id',

@@ -1,108 +1,65 @@
 <template>
   <div class="signup-container">
-    <h2 class="signup-title">Create Account</h2>
-    <p class="signup-subtitle">Join our gaming community today</p>
-
-    <p v-if="error" class="error-message">
-      <i class="fas fa-exclamation-circle"></i>
-      {{ error }}
-    </p>
-
-    <form @submit.prevent="handleSignUp" class="signup-form">
-      <div class="form-group">
-        <label for="username">Username</label>
-        <div class="input-wrapper">
-          <i class="fas fa-user input-icon"></i>
+    <div class="signup-form">
+      <h2>Create an Account</h2>
+      
+      <div v-if="message" :class="['message', messageType]">
+        {{ message }}
+      </div>
+      
+      <form @submit.prevent="handleSignUp">
+        <div class="form-group">
+          <label for="username">Username*</label>
           <input 
             id="username"
-            v-model.trim="username" 
-            type="text" 
-            placeholder="Choose a username" 
+            v-model="form.username"
+            type="text"
+            placeholder="Choose a username"
             required
-            class="form-input"
-            :class="{ 'error': usernameError }"
-            @input="validateUsername"
           />
         </div>
-        <span v-if="usernameError" class="error-text">{{ usernameError }}</span>
-      </div>
-
-      <div class="form-group">
-        <label for="email">Email</label>
-        <div class="input-wrapper">
-          <i class="fas fa-envelope input-icon"></i>
+        
+        <div class="form-group">
+          <label for="email">Email*</label>
           <input 
             id="email"
-            v-model.trim="email" 
-            type="email" 
-            placeholder="Enter your email" 
+            v-model="form.email"
+            type="email"
+            placeholder="Enter your email"
             required
-            class="form-input"
-            :class="{ 'error': emailError }"
-            @input="validateEmail"
           />
         </div>
-        <span v-if="emailError" class="error-text">{{ emailError }}</span>
-      </div>
-
-      <div class="form-group">
-        <label for="password">Password</label>
-        <div class="input-wrapper">
-          <i class="fas fa-lock input-icon"></i>
+        
+        <div class="form-group">
+          <label for="password">Password*</label>
           <input 
             id="password"
-            v-model="password" 
-            :type="showPassword ? 'text' : 'password'" 
-            placeholder="Create a password" 
+            v-model="form.password"
+            type="password"
+            placeholder="Create a password"
             required
-            class="form-input"
-            :class="{ 'error': passwordError }"
-            @input="validatePassword"
           />
-          <button 
-            type="button" 
-            class="toggle-password"
-            @click="showPassword = !showPassword"
-          >
-            <i :class="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
-          </button>
         </div>
-        <span v-if="passwordError" class="error-text">{{ passwordError }}</span>
-      </div>
-
-      <div class="form-group">
-        <label for="password2">Confirm Password</label>
-        <div class="input-wrapper">
-          <i class="fas fa-lock input-icon"></i>
+        
+        <div class="form-group">
+          <label for="password2">Confirm Password*</label>
           <input 
             id="password2"
-            v-model="password2" 
-            :type="showPassword ? 'text' : 'password'" 
-            placeholder="Confirm your password" 
+            v-model="form.password2"
+            type="password"
+            placeholder="Confirm your password"
             required
-            class="form-input"
-            :class="{ 'error': password2Error }"
-            @input="validatePassword2"
           />
         </div>
-        <span v-if="password2Error" class="error-text">{{ password2Error }}</span>
+        
+        <button type="submit" :disabled="isSubmitting" class="signup-button">
+          {{ isSubmitting ? 'Creating Account...' : 'Sign Up' }}
+        </button>
+      </form>
+      
+      <div class="login-link">
+        Already have an account? <router-link to="/login">Log in</router-link>
       </div>
-
-      <button 
-        type="submit" 
-        :disabled="isLoading || !isFormValid"
-        class="submit-button"
-      >
-        <i v-if="isLoading" class="fas fa-spinner fa-spin"></i>
-        <span v-else>Create Account</span>
-      </button>
-    </form>
-
-    <div class="form-footer">
-      <p class="login-link">
-        Already have an account? 
-        <router-link to="/login">Sign in</router-link>
-      </p>
     </div>
   </div>
 </template>
@@ -114,92 +71,99 @@ export default {
   name: 'SignUpView',
   data() {
     return {
-      username: '',
-      email: '',
-      password: '',
-      password2: '',
-      error: '',
-      isLoading: false,
-      showPassword: false,
-      usernameError: '',
-      emailError: '',
-      passwordError: '',
-      password2Error: ''
+      form: {
+        username: '',
+        email: '',
+        password: '',
+        password2: ''
+      },
+      isSubmitting: false,
+      message: '',
+      messageType: '',
+      errors: {}
     };
   },
-  computed: {
-    isFormValid() {
-      return this.username && 
-             this.email && 
-             this.password && 
-             this.password2 && 
-             !this.usernameError && 
-             !this.emailError && 
-             !this.passwordError && 
-             !this.password2Error;
-    }
-  },
   methods: {
-    validateUsername() {
-      if (!this.username) {
-        this.usernameError = 'Username is required';
-      } else if (this.username.length < 3) {
-        this.usernameError = 'Username must be at least 3 characters';
-      } else if (!/^[a-zA-Z0-9_]+$/.test(this.username)) {
-        this.usernameError = 'Username can only contain letters, numbers, and underscores';
-      } else {
-        this.usernameError = '';
+    validateForm() {
+      this.errors = {};
+
+      if (!this.form.username) {
+        this.errors.username = 'Username is required';
       }
-    },
-    validateEmail() {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!this.email) {
-        this.emailError = 'Email is required';
-      } else if (!emailRegex.test(this.email)) {
-        this.emailError = 'Please enter a valid email address';
-      } else {
-        this.emailError = '';
+
+      if (!this.form.email) {
+        this.errors.email = 'Email is required';
+      } else if (!this.validateEmail(this.form.email)) {
+        this.errors.email = 'Please enter a valid email address';
       }
-    },
-    validatePassword() {
-      if (!this.password) {
-        this.passwordError = 'Password is required';
-      } else {
-        this.passwordError = '';
+
+      if (!this.form.password) {
+        this.errors.password = 'Password is required';
       }
-      if (this.password2) {
-        this.validatePassword2();
+
+      if (this.form.password !== this.form.password2) {
+        this.errors.confirmPassword = 'Passwords do not match';
       }
-    },
-    validatePassword2() {
-      if (!this.password2) {
-        this.password2Error = 'Please confirm your password';
-      } else if (this.password2 !== this.password) {
-        this.password2Error = 'Passwords do not match';
-      } else {
-        this.password2Error = '';
-      }
+
+      return Object.keys(this.errors).length === 0;
     },
     async handleSignUp() {
-      if (!this.isFormValid) return;
+      if (!this.validateForm()) return;
 
-      this.isLoading = true;
-      this.error = '';
-
+      this.isSubmitting = true;
+      this.message = '';
+      
       try {
-        await axios.post('http://127.0.0.1:8000/api/register/', {
-          username: this.username,
-          email: this.email,
-          password: this.password,
-          password2: this.password2
+        const response = await axios.post('http://localhost:8000/register/', {
+          username: this.form.username,
+          email: this.form.email,
+          password: this.form.password,
+          password2: this.form.password2
         });
-
-        window.location.replace('/login');
+        
+        console.log('Registration successful:', response.data);
+        this.message = 'Account created successfully! You can now log in.';
+        this.messageType = 'success';
+        
+        // Reset form after successful registration
+        this.form = {
+          username: '',
+          email: '',
+          password: '',
+          password2: ''
+        };
+        
+        // Redirect to login page after a short delay
+        setTimeout(() => {
+          this.$router.push('/login');
+        }, 2000);
       } catch (error) {
-        this.error = error.response?.data?.message || 'Failed to create account';
+        console.error('Registration error:', error);
+        this.message = 'Error creating account. Please try again.';
+        this.messageType = 'error';
+        
+        if (error.response && error.response.data) {
+          // Display more specific error messages if available
+          const errors = error.response.data;
+          if (typeof errors === 'object') {
+            const errorMessages = [];
+            for (const field in errors) {
+              if (Array.isArray(errors[field])) {
+                errorMessages.push(`${field}: ${errors[field].join(', ')}`);
+              } else {
+                errorMessages.push(`${field}: ${errors[field]}`);
+              }
+            }
+            this.message = errorMessages.join('\n');
+          }
+        }
       } finally {
-        this.isLoading = false;
+        this.isSubmitting = false;
       }
+    },
+    validateEmail(email) {
+      // Implement your email validation logic here
+      return true; // Placeholder return, actual implementation needed
     }
   }
 };
@@ -207,160 +171,107 @@ export default {
 
 <style scoped>
 .signup-container {
-  max-width: 400px;
-  margin: 3rem auto;
-  padding: 2rem;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-}
-
-.signup-title {
-  text-align: center;
-  margin-bottom: 0.5rem;
-  color: #333;
-  font-size: 1.8rem;
-  font-weight: 600;
-}
-
-.signup-subtitle {
-  text-align: center;
-  color: #666;
-  margin-bottom: 2rem;
-  font-size: 1rem;
-}
-
-.error-message {
-  background-color: #fee2e2;
-  color: #b91c1c;
-  padding: 0.75rem;
-  margin-bottom: 1.5rem;
-  border-radius: 6px;
-  font-size: 0.875rem;
-  text-align: center;
   display: flex;
-  align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  align-items: center;
+  min-height: calc(100vh - 120px);
+  padding: 20px;
+}
+
+.signup-form {
+  width: 100%;
+  max-width: 450px;
+  padding: 30px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #333;
 }
 
 .form-group {
-  margin-bottom: 1.5rem;
+  margin-bottom: 20px;
 }
 
-.form-group label {
+label {
   display: block;
-  margin-bottom: 0.5rem;
-  color: #333;
-  font-weight: 500;
-}
-
-.input-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.input-icon {
-  position: absolute;
-  left: 1rem;
-  color: #666;
-}
-
-.form-input {
-  width: 100%;
-  padding: 0.75rem 1rem 0.75rem 2.5rem;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  font-size: 1rem;
-  transition: all 0.2s ease;
-}
-
-.form-input:focus {
-  border-color: #4f46e5;
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.1);
-}
-
-.form-input.error {
-  border-color: #dc2626;
-}
-
-.error-text {
-  color: #dc2626;
-  font-size: 0.875rem;
-  margin-top: 0.25rem;
-  display: block;
-}
-
-.toggle-password {
-  position: absolute;
-  right: 1rem;
-  background: none;
-  border: none;
-  color: #666;
-  cursor: pointer;
-  padding: 0;
-}
-
-.toggle-password:hover {
-  color: #4f46e5;
-}
-
-.submit-button {
-  width: 100%;
-  padding: 0.875rem;
-  background-color: #4f46e5;
-  color: white;
+  margin-bottom: 5px;
   font-weight: 600;
+  color: #555;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+input:focus {
+  border-color: #ff4d4f;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(255, 77, 79, 0.2);
+}
+
+.signup-button {
+  width: 100%;
+  padding: 12px;
+  background-color: #ff4d4f;
+  color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 600;
   cursor: pointer;
-  font-size: 1rem;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
+  transition: background-color 0.2s;
 }
 
-.submit-button:hover:not(:disabled) {
-  background-color: #4338ca;
-  transform: translateY(-1px);
+.signup-button:hover {
+  background-color: #ff7875;
 }
 
-.submit-button:disabled {
-  opacity: 0.7;
+.signup-button:disabled {
+  background-color: #ffcccb;
   cursor: not-allowed;
-  transform: none;
 }
 
-.form-footer {
-  margin-top: 2rem;
-  text-align: center;
+.message {
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+  white-space: pre-line;
+}
+
+.message.error {
+  background-color: #fff2f0;
+  border: 1px solid #ffccc7;
+  color: #ff4d4f;
+}
+
+.message.success {
+  background-color: #f6ffed;
+  border: 1px solid #b7eb8f;
+  color: #52c41a;
 }
 
 .login-link {
-  font-size: 0.875rem;
+  margin-top: 20px;
+  text-align: center;
   color: #666;
 }
 
 .login-link a {
-  color: #4f46e5;
+  color: #ff4d4f;
   text-decoration: none;
-  font-weight: 500;
-  transition: color 0.2s ease;
+  font-weight: 600;
 }
 
 .login-link a:hover {
-  color: #4338ca;
   text-decoration: underline;
-}
-
-@media (max-width: 480px) {
-  .signup-container {
-    margin: 1rem;
-    padding: 1.5rem;
-  }
 }
 </style>
