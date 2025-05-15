@@ -7,10 +7,10 @@
     
     <form @submit.prevent="submitReview">
       <div class="form-group">
-        <label for="rating">Rating (1-5)</label>
+        <label for="rating">Rating (1-10)</label>
         <select id="rating" v-model="review.rating" required class="form-control">
           <option value="" disabled>Select rating</option>
-          <option v-for="n in 5" :key="n" :value="n">{{ n }} {{ n === 1 ? 'Star' : 'Stars' }}</option>
+          <option v-for="n in 10" :key="n" :value="n">{{ n }} {{ n === 1 ? 'Star' : 'Stars' }}</option>
         </select>
       </div>
       

@@ -24,7 +24,7 @@
           </div>
           <div class="info-item rating">
             <span class="label">User Score:</span> 
-            <span class="score">{{ game.average_rating }}/5</span>
+            <span class="score">{{ game.average_rating }}/10</span>
           </div>
         </div>
         
@@ -53,7 +53,7 @@
             </div>
             <div class="review-actions">
               <div class="review-rating">
-                Rating: <span class="rating-value">{{ review.rating }}/5</span>
+                Rating: <span class="rating-value">{{ review.rating }}/10</span>
               </div>
               <button 
                 v-if="canDeleteReview(review)" 

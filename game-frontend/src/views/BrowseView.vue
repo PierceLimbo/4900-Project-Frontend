@@ -49,7 +49,7 @@
             <span class="genre" v-if="game.genre_name">{{ game.genre_name }}</span>
           </div>
           <div class="rating">
-            <span class="rating-value">{{ game.average_rating }}/5</span>
+            <span class="rating-value">{{ game.average_rating }}/10</span>
           </div>
         </div>
       </div>
