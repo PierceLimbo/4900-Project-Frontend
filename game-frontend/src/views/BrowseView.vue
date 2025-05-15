@@ -108,21 +108,18 @@ export default {
       }
     },
     filterGames() {
-      let filtered = [...this.games];
-
-      if (this.searchQuery) {
-        filtered = filtered.filter(game =>
-          game.title.toLowerCase().includes(this.searchQuery.toLowerCase())
-        );
-      }
-
-      if (this.selectedGenre) {
-        filtered = filtered.filter(game =>
-          game.genres.some(genre => genre.id === this.selectedGenre)
-        );
-      }
-
-      this.filteredGames = filtered;
+      this.filteredGames = this.games.filter(game => {
+        // Filter by search query
+        const matchesSearch = this.searchQuery === '' || 
+          (game.title && game.title.toLowerCase().includes(this.searchQuery.toLowerCase())) ||
+          (game.description && game.description.toLowerCase().includes(this.searchQuery.toLowerCase()));
+        
+        // Filter by genre
+        const matchesGenre = this.selectedGenre === '' || 
+          (game.genre && game.genre === parseInt(this.selectedGenre));
+        
+        return matchesSearch && matchesGenre;
+      });
     },
     goToGameDetails(gameId) {
       this.$router.push(`/games/${gameId}`);

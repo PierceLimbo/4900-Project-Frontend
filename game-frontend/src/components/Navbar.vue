@@ -134,15 +134,17 @@ export default {
 }
 
 .auth-btn.login {
-  background-color: white;
-  color: #ff4d4f;
+  background-color: #e63946;
+  color: white;
   text-decoration: none;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .auth-btn.login:hover {
-  background-color: #ffe8e8;
-  color: #b40000;
-  border-color: #ffe8e8;
+  background-color: #d62828;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
 }
 
 .auth-btn.signup {
