@@ -72,7 +72,7 @@ export default {
       
       try {
         const response = await axios.put(
-          `http://localhost:8000/reviews/${this.review.review_id}/update/`,
+          `https://isqa4900.pythonanywhere.com/reviews/${this.review.review_id}/update/`,
           {
             rating: this.editedReview.rating,
             review_text: this.editedReview.review_text,

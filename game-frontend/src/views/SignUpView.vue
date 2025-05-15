@@ -114,7 +114,7 @@ export default {
       this.message = '';
       
       try {
-        const response = await axios.post('http://localhost:8000/register/', {
+        const response = await axios.post('https://isqa4900.pythonanywhere.com/register/', {
           username: this.form.username,
           email: this.form.email,
           password: this.form.password,

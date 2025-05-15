@@ -138,7 +138,7 @@ export default {
   methods: {
     async fetchGenres() {
       try {
-        const response = await axios.get('http://localhost:8000/api/genres/');
+        const response = await axios.get('https://isqa4900.pythonanywhere.com/api/genres/');
         this.genres = response.data;
       } catch (error) {
         console.error('Error fetching genres:', error);
@@ -175,7 +175,7 @@ export default {
         }
 
         const response = await axios.post(
-          'http://localhost:8000/games/create/',
+          'https://isqa4900.pythonanywhere.com/games/create/',
           formDataToSend,
           {
             headers: {

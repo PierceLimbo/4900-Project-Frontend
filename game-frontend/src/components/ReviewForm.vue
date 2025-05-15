@@ -70,7 +70,7 @@ export default {
         console.log('Submitting review for game:', this.gameId);
         
         const response = await axios.post(
-          'http://localhost:8000/reviews/create/',
+          'https://isqa4900.pythonanywhere.com/reviews/create/',
           {
             game: this.gameId,
             rating: this.review.rating,

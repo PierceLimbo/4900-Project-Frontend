@@ -113,7 +113,7 @@ export default {
   methods: {
     async fetchGameDetails() {
       try {
-        const response = await axios.get(`http://127.0.0.1:8000/games/${this.gameId}/`);
+        const response = await axios.get(`https://isqa4900.pythonanywhere.com/games/${this.gameId}/`);
         this.game = response.data;
       } catch (error) {
         console.error('Error fetching game details:', error);
@@ -121,7 +121,7 @@ export default {
     },
     async fetchGameReviews() {
       try {
-        const response = await axios.get(`http://127.0.0.1:8000/reviews/?game=${this.gameId}`);
+        const response = await axios.get(`https://isqa4900.pythonanywhere.com/reviews/?game=${this.gameId}`);
         this.reviews = response.data;
       } catch (error) {
         console.error('Error fetching reviews:', error);
@@ -129,7 +129,7 @@ export default {
     },
     async fetchCurrentUser() {
       try {
-        const response = await axios.get('http://127.0.0.1:8000/api/user/', {
+        const response = await axios.get('https://isqa4900.pythonanywhere.com/api/user/', {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
           }
@@ -159,7 +159,7 @@ export default {
       this.isDeletingReview = reviewId;
       
       try {
-        await axios.delete(`http://127.0.0.1:8000/reviews/${reviewId}/`, {
+        await axios.delete(`https://isqa4900.pythonanywhere.com/reviews/${reviewId}/`, {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
           }

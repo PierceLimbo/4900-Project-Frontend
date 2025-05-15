@@ -90,7 +90,7 @@ export default {
   methods: {
     async fetchGames() {
       try {
-        const response = await axios.get('http://localhost:8000/games/');
+        const response = await axios.get('https://isqa4900.pythonanywhere.com/games/');
         this.games = response.data;
         this.filteredGames = [...this.games];
         this.loading = false;
@@ -101,7 +101,7 @@ export default {
     },
     async fetchGenres() {
       try {
-        const response = await axios.get('http://localhost:8000/api/genres/');
+        const response = await axios.get('https://isqa4900.pythonanywhere.com/api/genres/');
         this.genres = response.data;
       } catch (error) {
         console.error('Error fetching genres:', error);

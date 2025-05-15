@@ -87,7 +87,7 @@ export default {
   methods: {
     async fetchCurrentUser() {
       try {
-        const response = await axios.get('http://localhost:8000/api/user/', {
+        const response = await axios.get('https://isqa4900.pythonanywhere.com/api/user/', {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
           }
@@ -108,7 +108,7 @@ export default {
       
       try {
         // Build the URL with optional game filter
-        let url = `http://localhost:8000/reviews/?user=${this.currentUser.id}`;
+        let url = `https://isqa4900.pythonanywhere.com/reviews/?user=${this.currentUser.id}`;
         if (this.gameId) {
           url += `&game=${this.gameId}`;
         }
@@ -139,7 +139,7 @@ export default {
       this.isDeletingReview = reviewId;
       
       try {
-        await axios.delete(`http://localhost:8000/reviews/${reviewId}/`, {
+        await axios.delete(`https://isqa4900.pythonanywhere.com/reviews/${reviewId}/`, {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
           }

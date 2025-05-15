@@ -118,7 +118,7 @@ export default {
       this.error = '';
 
       try {
-        const response = await axios.post('http://127.0.0.1:8000/api/token/', {
+        const response = await axios.post('https://isqa4900.pythonanywhere.com/api/token/', {
           username: this.username,
           password: this.password
         });
